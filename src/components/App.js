@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AddContact } from "./AddContact";
 import { ContactList } from "./ContactList";
 import { Header } from "./Header";
@@ -21,23 +21,24 @@ function App() {
     setContacts([...contacts, contact]);
   };
 
-  const removeContact = (id) => {
+
+  const removeContactHandler = (id) => {
     const newContactList = contacts.filter((contact) => {
       return contact.id !== id;
     });
 
     setContacts(newContactList);
-  }
+  };
 
   useEffect(() => {
-   
-
-    return() => {
-      window.onstorage = () =>{
-        const retrieveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    return () => {
+      window.onstorage = () => {
+        const retrieveContacts = JSON.parse(
+          localStorage.getItem(LOCAL_STORAGE_KEY)
+        );
         if (retrieveContacts) setContacts(retrieveContacts);
-      }
-    }
+      };
+    };
   }, []);
 
   // // useEffect will render the component if there are any values which have been changed.
@@ -46,13 +47,29 @@ function App() {
   }, [contacts]);
 
   return (
-    
-      <div className="ui container">
+    <div className="ui container">
+      
+      <Router>
         <Header />
-        <AddContact addContactHandler={addContactHandler} />
-        <ContactList contacts={contacts} getContactId={removeContact}/>
-      </div>
-    
+        <Routes>
+          <Route
+            path="/"
+            exact
+            element={
+              <ContactList
+              contacts={contacts} getContactId={removeContactHandler}
+              />
+            }
+          />
+          <Route
+            path="/add"
+            element={
+              <AddContact addContactHandler={addContactHandler} />
+            }
+          />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

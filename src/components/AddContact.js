@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { Link, useNavigate } from "react-router-dom";
 export class AddContact extends Component {
   state = {
     name: "",
@@ -8,6 +8,7 @@ export class AddContact extends Component {
   };
 
   Add = (e) => {
+    
     const regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 
     // preventDefault to prevent the form not get the data from the user.
@@ -35,16 +36,26 @@ export class AddContact extends Component {
       alert("Your age is too young");
       return;
     }
-   
+
     // pass object from AddContact component to App component.
+
     this.props.addContactHandler(this.state);
     this.setState({ name: "", email: "", age: "" });
+    
+    
   };
 
   render() {
     return (
       <div className="ui main">
-        <h2>Add Contact</h2>
+        <h2>
+          Add Contact
+          <Link to="/">
+            <button className="ui button blue right floated">
+              Contact List
+            </button>
+          </Link>
+        </h2>
         <form className="ui form" onSubmit={this.Add}>
           <div className=" field">
             <label>Name</label>
@@ -76,7 +87,8 @@ export class AddContact extends Component {
               onChange={(e) => this.setState({ age: e.target.value })}
             />
           </div>
-          <button className="ui button blue fixed container">Add</button>
+
+          <button  className="ui button blue fixed container">Add</button>
         </form>
       </div>
     );
